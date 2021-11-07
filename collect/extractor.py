@@ -61,6 +61,15 @@ class Brand:
             'logo_path': self.logoPath,
         }
 
+    @staticmethod
+    def from_obj(br_obj: db.Brand) -> 'Brand':
+        return Brand(
+            id=br_obj.external_id,
+            url=br_obj.url,
+            name=br_obj.name,
+            logoPath=br_obj.logo_path
+        )
+
 
 class BrandsExtractor(Extractor):
     result: list[Brand]

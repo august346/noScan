@@ -14,9 +14,9 @@ celery -A celery_tasks worker --loglevel=INFO -B -E
 - [ ] config docker
 - [ ] celery
     - [ ] proxy
-    - [ ] weekly full scan
-    - [ ] daily scan empties
-    - [ ] check periodic
+    - [x] weekly full scan
+    - [x] daily scan empties
+    - [x] check periodic
 - [ ] web
     - [ ] dashboard
         - [ ] pagination

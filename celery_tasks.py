@@ -10,6 +10,9 @@ from collect.collector import get_letters, get_brands, is_empty, get_likes
 from collect.extractor import Letter, Brand
 
 
+logging.basicConfig(level=logging.INFO)     # for local debug
+
+
 @worker_ready.connect
 def at_start(*args, **kwargs):
     collect_full()
@@ -21,6 +24,25 @@ def collect_full():
         for let, let_obj in collect_letters(session):
             for br, br_obj in collect_brands(session, let, let_obj):
                 logging.info(br_obj)
+
+
+@app.task
+def update_empties():
+    with Session(db.engine) as session:
+        brands: Iterable[db.Brand] = session.query(db.Brand).filter(db.Brand.empty)
+        already_not_empty: Iterable[db.Brand] = filter(
+            lambda obj: not is_empty(Brand.from_obj(obj)),
+            brands
+        )
+
+        ind: int = 0
+        for ind, br_obj in enumerate(already_not_empty, start=1):
+            br_obj.empty = False
+            session.commit()
+
+            logging.info(f"updated already not empty: {br_obj}")
+
+        logging.info(f"total updated not empty: {ind}")
 
 
 @app.task()
@@ -56,6 +78,6 @@ def collect_likes():
             br_obj.likes.append(likes_obj)
             session.commit()
 
-            logging.info(likes_obj)
+            logging.info(f'likes collected: {likes_obj}')
 
-        logging.info(f'total: {ind}')
+        logging.info(f'total likes collected: {ind}')
