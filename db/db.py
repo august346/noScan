@@ -2,12 +2,13 @@ from datetime import datetime
 
 import sqlalchemy as db
 from sqlalchemy.dialects.mysql import insert
-from sqlalchemy.orm import declarative_base, relationship, Session
+from sqlalchemy.orm import declarative_base, relationship, Session, sessionmaker
 
 engine = db.create_engine('mariadb+pymysql://root:root@localhost/brands?charset=utf8mb4')
 
 meta = db.MetaData(bind=engine)
 Base = declarative_base(metadata=meta)
+SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 
 class Letter(Base):
