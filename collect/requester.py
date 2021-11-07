@@ -16,17 +16,18 @@ def paused(func: Callable):
     paused.ts = None
 
     @wraps(func)
-    def wrapper(*args, **kwargs):
-        need_wait: bool = bool(PAUSE and paused.ts)
+    def wrapper(obj: 'Requester', *args, **kwargs):
+        pause: int = obj.pause or PAUSE
+        need_wait: bool = bool(pause and paused.ts)
         if need_wait:
-            min_time_from: float = paused.ts + PAUSE
+            min_time_from: float = paused.ts + pause
             sleep_time: float = min_time_from - time.time()
             sleep_time = round(sleep_time, 2)
 
             if sleep_time > 0:
                 time.sleep(sleep_time)
 
-        result = func(*args, **kwargs)
+        result = func(obj, *args, **kwargs)
         paused.ts = time.time()
 
         return result
@@ -38,6 +39,8 @@ class Requester:
     _method: str
 
     response: Response
+
+    pause: int = PAUSE
 
     @property
     def _path(self) -> str:
@@ -94,8 +97,11 @@ class WithoutGoodsRequester(Requester):
 class LikeRequester(Requester):
     _method = 'post'
 
+    pause = 3
+
     def __init__(self, brand_id: int):
         self.brand_id = brand_id
 
+    @property
     def _path(self) -> str:
         return f'/favorites/brand/getvotes?brandId={self.brand_id}'

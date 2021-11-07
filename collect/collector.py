@@ -1,6 +1,7 @@
 import logging
 from typing import Optional
 
+import db
 from collect.extractor import LettersExtractor, Letter, Brand, BrandsExtractor, WithoutGoodsExtractor, LikeExtractor
 from collect.requester import LettersRequester, BrandsRequester, WithoutGoodsRequester, LikeRequester
 
@@ -39,12 +40,12 @@ def is_empty(brand: Brand) -> Optional[bool]:
     return wge.result
 
 
-def get_likes(brand: Brand) -> Optional[int]:
-    lr = LikeRequester(brand.id)
+def get_likes(brand_obj: db.Brand) -> Optional[int]:
+    lr = LikeRequester(brand_obj.external_id)
     lr.do()
 
     if not lr.is_2xx:
-        logging.error(f'Failed get brand=`{brand.name}` likes')
+        logging.error(f'Failed get brand=`{brand_obj.name}` likes')
         return None
 
     le = LikeExtractor(lr.response)

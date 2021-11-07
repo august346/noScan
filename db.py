@@ -34,6 +34,9 @@ class Brand(Base):
     letter = relationship('Letter', back_populates='brands')
     likes = relationship("BrandLikes")
 
+    def __repr__(self):
+        return f'{self.__class__.__name__}(id="{self.id}", name="{self.name}", url="{self.url}")'
+
 
 class BrandLikes(Base):
     __tablename__ = 'brands_likes'
@@ -44,6 +47,9 @@ class BrandLikes(Base):
     brand_id = db.Column(db.Integer, db.ForeignKey('brands.id'))
 
     brand = relationship('Brand', back_populates='likes')
+
+    def __repr__(self):
+        return f'{self.__class__.__name__}(created="{self.created}", likes="{self.likes}", brand="{self.brand}")'
 
 
 def get_or_create(session: Session, model: Base, dataclass, **kwargs) -> Base:
