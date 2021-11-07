@@ -4,7 +4,7 @@ from typing import Any
 from bs4 import BeautifulSoup
 from requests import Response
 
-import db
+from db import db
 
 
 class Extractor:

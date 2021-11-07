@@ -4,7 +4,7 @@ from typing import Iterable
 from celery.signals import worker_ready
 from sqlalchemy.orm import Session
 
-import db
+from db import db
 from celery_app import app
 from collect.collector import get_letters, get_brands, is_empty, get_likes
 from collect.extractor import Letter, Brand

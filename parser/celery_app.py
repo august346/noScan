@@ -1,7 +1,7 @@
 from celery import Celery
 from celery.schedules import crontab
 
-import db
+from db import db
 
 db.meta.create_all()
 app = Celery(broker='amqp://guest:guest@localhost:5672/', backend='redis://localhost:6379/0')

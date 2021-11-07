@@ -1,5 +1,8 @@
 # WB demand brands
 
+## requirements
+python 3.10
+
 ## run
 
 ```commandline

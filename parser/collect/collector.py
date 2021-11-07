@@ -1,7 +1,7 @@
 import logging
 from typing import Optional
 
-import db
+from db import db
 from collect.extractor import LettersExtractor, Letter, Brand, BrandsExtractor, WithoutGoodsExtractor, LikeExtractor
 from collect.requester import LettersRequester, BrandsRequester, WithoutGoodsRequester, LikeRequester
 
